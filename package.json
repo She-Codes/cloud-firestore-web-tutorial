@@ -4,7 +4,7 @@
   "main": "js/app.js",
   "license": "MIT",
   "scripts": {
-    "scss": "node-sass scss --source-map true --output-style compressed -o css scss",
+    "scss": "node-sass --source-map true --output-style compressed -o css scss",
     "autoprefixer": "postcss css/*.css -r -u autoprefixer --no-map​",
     "buildcss": "yarn run scss && yarn run autoprefixer",
     "watchcss": "onchange 'scss/*.scss' -- yarn run buildcss",
