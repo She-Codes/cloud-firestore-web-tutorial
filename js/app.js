@@ -9,4 +9,6 @@ let config = {
 };
 
 firebase.initializeApp(config);
+let firestore = firebase.firestore();
+
 

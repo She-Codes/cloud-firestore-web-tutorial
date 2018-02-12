@@ -13,10 +13,11 @@ let uiConfig = {
   // Terms of service url.
   tosUrl: '<your-tos-url>'
 };
-
 let auth = firebase.auth();
 // Initialize the FirebaseUI Widget using Firebase.
 let ui = new firebaseui.auth.AuthUI(auth);
+let userCollectionRef = firestore.collection('users');
+
 
 // The start method will wait until the DOM is loaded.
 ui.start('#firebaseui-auth-container', uiConfig);
@@ -36,6 +37,15 @@ initApp = function() {
       var uid = user.uid;
       var phoneNumber = user.phoneNumber;
       var providerData = user.providerData;
+      var userObj = {
+        displayName: displayName,
+        email: email,
+        emailVerified: emailVerified,
+        phoneNumber: phoneNumber,
+        photoURL: photoURL,
+        providerData: providerData
+      }
+      userCollectionRef.doc(user.uid).set(userObj);
       user.getIdToken().then(function(accessToken) {
         document.getElementById('sign-in-status').textContent = 'Signed in';
         document.getElementById('sign-in').innerHTML = `<div>
@@ -52,11 +62,13 @@ initApp = function() {
           providerData: providerData
         }, null, '  ');
       });
+      currentUser = user;
     } else {
       // User is signed out.
       document.getElementById('sign-in-status').textContent = 'Signed out';
       document.getElementById('sign-in').textContent = 'Sign in';
       document.getElementById('account-details').textContent = 'null';
+      currentUser = null;
     }
   }, function(error) {
     console.log(error);
